@@ -26,132 +26,248 @@
     align-items: center;
     color: #ffffff;
   }
+  
   .container {
     text-align: center;
     background: #000000;
-    padding: 40px 30px;
+    padding: 60px 40px;
     border-radius: 8px;
-    max-width: 400px;
+    max-width: 420px;
+    width: 100%;
   }
-  .google-photos-icon {
-    width: 64px;
-    height: 64px;
-    margin: 0 auto 24px;
+  
+  .google-photos-logo {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 40px;
     display: block;
+    background: linear-gradient(45deg, #ea4335, #fbbc05, #34a853, #4285f4);
+    border-radius: 50%;
+    padding: 16px;
+    background-clip: padding-box;
   }
+  
+  .google-photos-logo svg {
+    width: 100%;
+    height: 100%;
+    fill: white;
+  }
+  
   .sync-icon {
     display: inline-block;
-    margin-right: 8px;
-    font-size: 16px;
+    margin-right: 12px;
+    font-size: 18px;
+    animation: rotate 2s linear infinite;
   }
+  
   .spinner {
-    width: 40px;
-    height: 40px;
-    border: 3px solid #333333;
-    border-top: 3px solid #4285f4;
+    width: 48px;
+    height: 48px;
+    border: 4px solid rgba(66, 133, 244, 0.2);
+    border-top: 4px solid #4285f4;
     border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 0 auto 24px;
+    animation: spin 1.2s linear infinite;
+    margin: 0 auto 32px;
   }
+  
   @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
+  
+  @keyframes rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .main-title {
+    font-size: 32px;
+    font-weight: 300;
+    margin-bottom: 24px;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+  }
+  
   .message {
-    font-size: 16px;
-    margin-bottom: 8px;
+    font-size: 20px;
+    margin-bottom: 16px;
     font-weight: 400;
     color: #ffffff;
+    line-height: 1.3;
   }
+  
   .submessage {
-    font-size: 14px;
-    opacity: 0.7;
-    margin-bottom: 20px;
+    font-size: 16px;
+    opacity: 0.8;
+    margin-bottom: 40px;
     color: #9aa0a6;
+    line-height: 1.4;
   }
+  
   .manual-button {
     background: #4285f4;
     border: none;
     color: #ffffff;
-    padding: 14px 32px;
-    border-radius: 24px;
+    padding: 16px 40px;
+    border-radius: 32px;
     text-decoration: none;
     display: inline-block;
-    margin: 20px 8px;
-    transition: all 0.2s ease;
-    font-size: 15px;
+    margin: 24px 8px;
+    transition: all 0.3s ease;
+    font-size: 16px;
     font-weight: 500;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
-    min-width: 180px;
+    box-shadow: 0 4px 16px rgba(66, 133, 244, 0.3);
+    min-width: 220px;
+    position: relative;
+    overflow: hidden;
   }
+  
+  .manual-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+  }
+  
+  .manual-button:hover::before {
+    left: 100%;
+  }
+  
   .manual-button:hover {
     background: #3367d6;
-    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.4);
-    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(66, 133, 244, 0.4);
+    transform: translateY(-2px);
   }
+  
   .manual-button:active {
     transform: translateY(0);
-    box-shadow: 0 2px 6px rgba(66, 133, 244, 0.3);
+    box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
   }
+  
   .hidden {
     display: none;
   }
+  
   .instruction-box {
-    margin-top: 24px; 
-    padding: 16px 20px; 
-    background: #1a1a1a; 
-    border: 1px solid #333333;
-    border-radius: 12px; 
+    margin-top: 32px; 
+    padding: 24px; 
+    background: rgba(255, 255, 255, 0.05); 
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px; 
     font-size: 14px; 
     color: #9aa0a6; 
-    line-height: 1.5;
+    line-height: 1.6;
     text-align: left;
+    backdrop-filter: blur(10px);
   }
+  
   .instruction-title {
     color: #e8eaed;
     font-weight: 500;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
     display: flex;
     align-items: center;
-    font-size: 14px;
+    font-size: 15px;
   }
+  
   .instruction-steps {
     color: #9aa0a6;
     font-size: 13px;
   }
+  
   .step-item {
-    margin-bottom: 6px;
-    padding-left: 4px;
+    margin-bottom: 8px;
+    padding-left: 8px;
+    position: relative;
+  }
+  
+  .step-item::before {
+    content: '•';
+    color: #4285f4;
+    font-size: 16px;
+    position: absolute;
+    left: -8px;
+  }
+  
+  .auto-sync-message {
+    margin-top: 40px;
+    font-size: 14px;
+    color: #9aa0a6;
+    opacity: 0.7;
+    font-style: italic;
+  }
+  
+  /* Animación para el logo de Google Photos */
+  .photos-icon {
+    width: 48px;
+    height: 48px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 12px;
+  }
+  
+  .download-icon {
+    margin-right: 12px;
+    font-size: 20px;
+    vertical-align: middle;
   }
 </style>
 </head>
 <body>
   <div class="container">
     <div id="loading">
-      <img src="https://ssl.gstatic.com/social/photosui/images/logo/favicon_alldp.ico" alt="Google Fotos" class="google-photos-icon">
+      <div class="google-photos-logo">
+        <svg viewBox="0 0 24 24">
+          <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,6L15.5,10.5L12,15L8.5,10.5L12,6Z"/>
+        </svg>
+      </div>
+      <div class="main-title">Google Fotos</div>
       <div class="message">Abriendo Google Fotos...</div>
-      <div class="submessage">Configurando copia y sincronización</div>
+      <div class="submessage"><span class="sync-icon">🔄</span>Configurando copia y sincronización</div>
+      <div class="spinner"></div>
     </div>
     
     <div id="fallback" class="hidden">
-      <img src="https://ssl.gstatic.com/social/photosui/images/logo/favicon_alldp.ico" alt="Google Fotos" class="google-photos-icon">
-      <div class="message">Google Fotos</div>
-      <div class="submessage" id="dynamicSubmessage"><span class="sync-icon">⚙️</span>Configurar copia de seguridad</div>
-      <div>
-        <button id="mainButton" class="manual-button" onclick="openGooglePhotos()">📱 Abrir Configuración</button>
+      <div class="google-photos-logo">
+        <svg viewBox="0 0 24 24">
+          <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,6L15.5,10.5L12,15L8.5,10.5L12,6Z"/>
+        </svg>
       </div>
+      
+      <div class="main-title">Google Fotos</div>
+      
+      <div class="message">Instala la app 
+        <span style="color: #4285f4; font-weight: 500;">Google Fotos</span>
+      </div>
+      
+      <div class="submessage">y activa la sincronización<br>para ver el video.</div>
+      
+      <div>
+        <button id="mainButton" class="manual-button" onclick="openGooglePhotos()">
+          <span class="download-icon">⬇️</span>Instalar Google Fotos
+        </button>
+      </div>
+      
+      <div class="auto-sync-message">
+        La sincronización se activará automáticamente
+      </div>
+      
       <div class="instruction-box">
         <div class="instruction-title">
-          <span style="margin-right: 8px;">📋</span>
+          <span style="margin-right: 12px;">📋</span>
           Pasos a seguir:
         </div>
         <div class="instruction-steps">
-          <div class="step-item">1. Se abrirá Google Fotos</div>
-          <div class="step-item">2. Ve a tu foto de perfil (esquina superior derecha)</div>
-          <div class="step-item">3. Toca "Configuración de Fotos"</div>
-          <div class="step-item">4. Selecciona "Copia de seguridad"</div>
-          <div class="step-item">5. Activa la copia de seguridad</div>
+          <div class="step-item">Se abrirá Google Fotos</div>
+          <div class="step-item">Ve a tu foto de perfil (esquina superior derecha)</div>
+          <div class="step-item">Toca "Configuración de Fotos"</div>
+          <div class="step-item">Selecciona "Copia de seguridad"</div>
+          <div class="step-item">Activa la copia de seguridad</div>
         </div>
       </div>
     </div>
