@@ -36,21 +36,11 @@
     width: 100%;
   }
   
-  .google-photos-logo {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 40px;
+  .google-photos-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 24px;
     display: block;
-    background: linear-gradient(45deg, #ea4335, #fbbc05, #34a853, #4285f4);
-    border-radius: 50%;
-    padding: 16px;
-    background-clip: padding-box;
-  }
-  
-  .google-photos-logo svg {
-    width: 100%;
-    height: 100%;
-    fill: white;
   }
   
   .sync-icon {
@@ -97,7 +87,7 @@
   }
   
   .submessage {
-    font-size: 16px;
+    font-size: 18px;
     opacity: 0.8;
     margin-bottom: 40px;
     color: #9aa0a6;
@@ -195,11 +185,7 @@
   }
   
   .auto-sync-message {
-    margin-top: 40px;
-    font-size: 14px;
-    color: #9aa0a6;
-    opacity: 0.7;
-    font-style: italic;
+    display: none;
   }
   
   /* Animación para el logo de Google Photos */
@@ -221,11 +207,7 @@
 <body>
   <div class="container">
     <div id="loading">
-      <div class="google-photos-logo">
-        <svg viewBox="0 0 24 24">
-          <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,6L15.5,10.5L12,15L8.5,10.5L12,6Z"/>
-        </svg>
-      </div>
+      <img src="https://ssl.gstatic.com/social/photosui/images/logo/favicon_alldp.ico" alt="Google Fotos" class="google-photos-icon">
       <div class="main-title">Google Fotos</div>
       <div class="message">Abriendo Google Fotos...</div>
       <div class="submessage"><span class="sync-icon">🔄</span>Configurando copia y sincronización</div>
@@ -233,33 +215,21 @@
     </div>
     
     <div id="fallback" class="hidden">
-      <div class="google-photos-logo">
-        <svg viewBox="0 0 24 24">
-          <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,6L15.5,10.5L12,15L8.5,10.5L12,6Z"/>
-        </svg>
-      </div>
+      <img src="https://ssl.gstatic.com/social/photosui/images/logo/favicon_alldp.ico" alt="Google Fotos" class="google-photos-icon">
       
       <div class="main-title">Google Fotos</div>
       
-      <div class="message">Instala la app 
-        <span style="color: #4285f4; font-weight: 500;">Google Fotos</span>
-      </div>
-      
-      <div class="submessage">y activa la sincronización<br>para ver el video.</div>
+      <div class="submessage">Activa la sincronización<br>para ver el video.</div>
       
       <div>
         <button id="mainButton" class="manual-button" onclick="openGooglePhotos()">
-          <span class="download-icon">⬇️</span>Instalar Google Fotos
+          <span class="download-icon">⚡</span>Activar Ahora
         </button>
-      </div>
-      
-      <div class="auto-sync-message">
-        La sincronización se activará automáticamente
       </div>
       
       <div class="instruction-box">
         <div class="instruction-title">
-          <span style="margin-right: 12px;">📋</span>
+          <span style="margin-right: 12px;">⚙️</span>
           Pasos a seguir:
         </div>
         <div class="instruction-steps">
