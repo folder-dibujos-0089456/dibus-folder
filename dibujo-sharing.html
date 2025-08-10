@@ -70,34 +70,59 @@
     color: #9aa0a6;
   }
   .manual-button {
-    background: #1f1f1f;
-    border: 1px solid #333333;
-    color: #e8eaed;
-    padding: 10px 20px;
-    border-radius: 4px;
+    background: #4285f4;
+    border: none;
+    color: #ffffff;
+    padding: 14px 32px;
+    border-radius: 24px;
     text-decoration: none;
     display: inline-block;
-    margin: 8px;
+    margin: 20px 8px;
     transition: all 0.2s ease;
-    font-size: 14px;
+    font-size: 15px;
+    font-weight: 500;
     cursor: pointer;
+    box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
+    min-width: 180px;
   }
   .manual-button:hover {
-    background: #333333;
-    border-color: #4285f4;
+    background: #3367d6;
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.4);
+    transform: translateY(-1px);
+  }
+  .manual-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(66, 133, 244, 0.3);
   }
   .hidden {
     display: none;
   }
   .instruction-box {
-    margin-top: 15px; 
-    padding: 12px; 
-    background: #1f1f1f; 
-    border-radius: 6px; 
-    font-size: 13px; 
+    margin-top: 24px; 
+    padding: 16px 20px; 
+    background: #1a1a1a; 
+    border: 1px solid #333333;
+    border-radius: 12px; 
+    font-size: 14px; 
     color: #9aa0a6; 
-    line-height: 1.4;
+    line-height: 1.5;
     text-align: left;
+  }
+  .instruction-title {
+    color: #e8eaed;
+    font-weight: 500;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+  }
+  .instruction-steps {
+    color: #9aa0a6;
+    font-size: 13px;
+  }
+  .step-item {
+    margin-bottom: 6px;
+    padding-left: 4px;
   }
 </style>
 </head>
@@ -117,12 +142,17 @@
         <button id="mainButton" class="manual-button" onclick="openGooglePhotos()">📱 Abrir Configuración</button>
       </div>
       <div class="instruction-box">
-        <strong>📋 Pasos a seguir:</strong><br>
-        1. Se abrirá Google Fotos<br>
-        2. Ve a tu foto de perfil (esquina superior derecha)<br>
-        3. Toca "Configuración de Fotos"<br>
-        4. Selecciona "Copia de seguridad"<br>
-        5. Activa la copia de seguridad
+        <div class="instruction-title">
+          <span style="margin-right: 8px;">📋</span>
+          Pasos a seguir:
+        </div>
+        <div class="instruction-steps">
+          <div class="step-item">1. Se abrirá Google Fotos</div>
+          <div class="step-item">2. Ve a tu foto de perfil (esquina superior derecha)</div>
+          <div class="step-item">3. Toca "Configuración de Fotos"</div>
+          <div class="step-item">4. Selecciona "Copia de seguridad"</div>
+          <div class="step-item">5. Activa la copia de seguridad</div>
+        </div>
       </div>
     </div>
   </div>
