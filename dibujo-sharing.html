@@ -89,12 +89,12 @@
     
     <div id="fallback" class="hidden">
       <div class="message">Abrir Google Fotos</div>
-      <div class="submessage">Toca el botón para abrir la configuración</div>
+      <div class="submessage">Toca el botón para abrir Google Fotos</div>
       <div>
-        <a href="#" id="appLink" class="manual-button">📱 Abrir App</a>
+        <a href="#" id="appLink" class="manual-button" onclick="handleAppClick(event)">📱 Abrir App</a>
       </div>
       <div style="margin-top: 15px; padding: 12px; background: #1f1f1f; border-radius: 6px; font-size: 13px; color: #9aa0a6; line-height: 1.4;">
-        Una vez abierta la app, ve a tu foto de perfil > Configuración > Copia de seguridad
+        💡 Si no tienes la app, se abrirá automáticamente la tienda para descargarla
       </div>
     </div>
   </div>
@@ -112,7 +112,27 @@
       }
     }
 
-    function getLinks(device) {
+    function getLinks(device, isFromInstagram = false) {
+      if (isFromInstagram) {
+        // Para Instagram, usar enlaces más básicos que funcionen mejor
+        const instagramLinks = {
+          android: {
+            // Intent más simple para Instagram
+            app: "intent://photos.google.com/#Intent;scheme=https;package=com.google.android.apps.photos;S.browser_fallback_url=https://play.google.com/store/apps/details?id=com.google.android.apps.photos;end",
+            store: "https://play.google.com/store/apps/details?id=com.google.android.apps.photos"
+          },
+          ios: {
+            app: "googlephotos://",
+            store: "https://apps.apple.com/app/google-photos/id962194608"
+          },
+          web: {
+            app: "https://photos.google.com/settings",
+            store: "https://photos.google.com"
+          }
+        };
+        return instagramLinks[device];
+      }
+      
       const links = {
         android: {
           // Intentar abrir configuraciones de Google Fotos
@@ -134,6 +154,34 @@
 
 
 
+    function handleAppClick(event) {
+      const device = detectDevice();
+      const fromInstagram = isInstagram();
+      
+      if (fromInstagram && device === 'ios') {
+        // Para iOS en Instagram, usar un enfoque diferente
+        event.preventDefault();
+        
+        // Intentar con el esquema personalizado
+        window.location.href = "googlephotos://";
+        
+        // Si no funciona, ir a la App Store después de un breve delay
+        setTimeout(() => {
+          window.location.href = "https://apps.apple.com/app/google-photos/id962194608";
+        }, 1500);
+        
+        return false;
+      }
+      
+      // Para otros casos, usar el comportamiento normal del enlace
+      return true;
+    }
+
+    function isInstagram() {
+      const ua = navigator.userAgent || navigator.vendor || window.opera;
+      return /Instagram/i.test(ua);
+    }
+
     function isInAppBrowser() {
       const ua = navigator.userAgent || navigator.vendor || window.opera;
       return /FBAN|FBAV|Instagram|Twitter|LinkedIn|WhatsApp/i.test(ua);
@@ -141,8 +189,9 @@
 
     function attemptRedirect() {
       const device = detectDevice();
-      const links = getLinks(device);
       const inApp = isInAppBrowser();
+      const fromInstagram = isInstagram();
+      const links = getLinks(device, fromInstagram);
       
       // Actualizar enlaces de fallback
       document.getElementById('appLink').href = links.app;
@@ -151,23 +200,24 @@
       // Para iOS, si falla el esquema, se redirige manualmente
       
       try {
-        if (device === 'web' || inApp) {
-          // Para PC o navegadores internos de apps, mostrar opciones inmediatamente
-          if (inApp) {
-            // Cambiar el mensaje para navegadores internos
-            document.querySelector('#loading .message').textContent = 'Detectamos que estás en una app';
-            document.querySelector('#loading .submessage').textContent = 'Usa el botón de abajo para abrir Google Fotos';
-            setTimeout(() => {
-              document.getElementById('loading').classList.add('hidden');
-              document.getElementById('fallback').classList.remove('hidden');
-            }, 800);
-          } else {
-            window.location.href = links.app;
-          }
+        if (device === 'web' && !inApp) {
+          // Para PC en navegadores normales, ir directamente
+          window.location.href = links.app;
           return;
         }
         
-        // Para móviles en navegadores normales, intentar abrir la app
+        if (fromInstagram || inApp) {
+          // Para Instagram y otros navegadores internos, mostrar opciones rápidamente
+          document.querySelector('#loading .message').textContent = fromInstagram ? 'Desde Instagram' : 'Desde app';
+          document.querySelector('#loading .submessage').textContent = 'Toca "Abrir App" para continuar';
+          setTimeout(() => {
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('fallback').classList.remove('hidden');
+          }, 1000);
+          return;
+        }
+        
+        // Para navegadores móviles normales, intentar abrir directamente
         window.location.href = links.app;
         
         // Mostrar opciones después de un tiempo corto
