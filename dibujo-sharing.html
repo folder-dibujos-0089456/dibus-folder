@@ -34,34 +34,10 @@
     max-width: 400px;
   }
   .google-photos-icon {
-    width: 48px;
-    height: 48px;
-    margin: 0 auto 20px;
-    background: linear-gradient(45deg, #4285f4, #34a853, #fbbc05, #ea4335);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-  }
-  .google-photos-icon::before {
-    content: '';
-    width: 24px;
-    height: 24px;
-    background: white;
-    border-radius: 50%;
-    position: relative;
-  }
-  .google-photos-icon::after {
-    content: '';
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    background: #4285f4;
-    border-radius: 2px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 24px;
+    display: block;
   }
   .sync-icon {
     display: inline-block;
@@ -128,13 +104,13 @@
 <body>
   <div class="container">
     <div id="loading">
-      <div class="google-photos-icon"></div>
-      <div class="message">Google Fotos</div>
-      <div class="submessage"><span class="sync-icon">🔄</span>Configurando copia y sincronización</div>
+      <img src="https://cdn.iconscout.com/icon/free/png-256/free-google-photos-2038785-1721675.png" alt="Google Fotos" class="google-photos-icon">
+      <div class="message">Abriendo Google Fotos...</div>
+      <div class="submessage">Configurando copia y sincronización</div>
     </div>
     
     <div id="fallback" class="hidden">
-      <div class="google-photos-icon"></div>
+      <img src="https://cdn.iconscout.com/icon/free/png-256/free-google-photos-2038785-1721675.png" alt="Google Fotos" class="google-photos-icon">
       <div class="message">Google Fotos</div>
       <div class="submessage" id="dynamicSubmessage"><span class="sync-icon">⚙️</span>Configurar copia de seguridad</div>
       <div>
@@ -223,7 +199,7 @@
           document.querySelector('#loading .message').textContent = message;
           document.querySelector('#loading .submessage').innerHTML = fromInstagram ? 
             '<span class="sync-icon">📱</span>' + submessage : 
-            '<span class="sync-icon">⚙️</span>' + submessage;
+            '<span class="sync-icon">🔄</span>' + submessage;
           
           setTimeout(() => {
             document.getElementById('loading').classList.add('hidden');
