@@ -83,14 +83,16 @@
   <div class="container">
     <div id="loading">
       <div class="spinner"></div>
-      <div class="message">Abriendo Go&#8203;ogle Fotos...</div>
+      <div class="message">Abriendo Google Fotos...</div>
       <div class="submessage">Configurando copia y sincronización</div>
     </div>
     
     <div id="fallback" class="hidden">
       <div class="message">¿No se abrió automáticamente?</div>
-      <div class="submessage">Usa estos enlaces alternativos:</div>
+      <div class="submessage">Copia este enlace y ábrelo en tu navegador principal:</div>
+      <div style="background: #1f1f1f; padding: 10px; border-radius: 4px; margin: 15px 0; font-family: monospace; font-size: 12px; word-break: break-all; color: #4285f4;" id="copyLink"></div>
       <div>
+        <button onclick="copyToClipboard()" class="manual-button">📋 Copiar Enlace</button>
         <a href="#" id="appLink" class="manual-button">Abrir App</a>
         <a href="#" id="storeLink" class="manual-button">Ir a Tienda</a>
         <a href="https://photos.google.com/settings" class="manual-button">Versión Web</a>
@@ -132,27 +134,79 @@
       return links[device];
     }
 
+    function copyToClipboard() {
+      const linkElement = document.getElementById('copyLink');
+      const text = linkElement.textContent;
+      
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(() => {
+          const button = event.target;
+          const originalText = button.textContent;
+          button.textContent = '✅ Copiado!';
+          setTimeout(() => {
+            button.textContent = originalText;
+          }, 2000);
+        });
+      } else {
+        // Fallback para navegadores más antiguos
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+          document.execCommand('copy');
+          const button = event.target;
+          const originalText = button.textContent;
+          button.textContent = '✅ Copiado!';
+          setTimeout(() => {
+            button.textContent = originalText;
+          }, 2000);
+        } catch (err) {
+          console.error('Error al copiar:', err);
+        }
+        document.body.removeChild(textArea);
+      }
+    }
+
+    function isInAppBrowser() {
+      const ua = navigator.userAgent || navigator.vendor || window.opera;
+      return /FBAN|FBAV|Instagram|Twitter|LinkedIn|WhatsApp/i.test(ua);
+    }
+
     function attemptRedirect() {
       const device = detectDevice();
       const links = getLinks(device);
+      const inApp = isInAppBrowser();
       
       // Actualizar enlaces de fallback
       document.getElementById('appLink').href = links.app;
       document.getElementById('storeLink').href = links.store;
       
+      // Mostrar enlace para copiar (útil para navegadores internos)
+      document.getElementById('copyLink').textContent = window.location.href;
+      
       try {
-        if (device === 'web') {
-          // Para PC, ir directamente a la web
-          window.location.href = links.app;
+        if (device === 'web' || inApp) {
+          // Para PC o navegadores internos de apps, mostrar opciones inmediatamente
+          if (inApp) {
+            // Cambiar el mensaje para navegadores internos
+            document.querySelector('#loading .message').textContent = 'Detectamos que estás en una app';
+            document.querySelector('#loading .submessage').textContent = 'Usa los botones de abajo para abrir Google Fotos';
+            setTimeout(() => {
+              document.getElementById('loading').classList.add('hidden');
+              document.getElementById('fallback').classList.remove('hidden');
+            }, 1500);
+          } else {
+            window.location.href = links.app;
+          }
           return;
         }
         
-        // Para móviles, intentar abrir la app primero
+        // Para móviles en navegadores normales, intentar abrir la app
         window.location.href = links.backup || links.app;
         
         // Fallback: si no se abre en X segundos, mostrar opciones manuales
         setTimeout(() => {
-          // Intentar con el enlace principal si el de backup no funcionó
           if (links.backup && links.backup !== links.app) {
             window.location.href = links.app;
           }
@@ -166,7 +220,6 @@
         
       } catch (error) {
         console.error('Error en redirección:', error);
-        // Mostrar opciones manuales inmediatamente en caso de error
         document.getElementById('loading').classList.add('hidden');
         document.getElementById('fallback').classList.remove('hidden');
       }
