@@ -319,13 +319,7 @@
         
         if (fromInstagram || inApp) {
           // Para Instagram y otros navegadores internos, mostrar botón inmediatamente
-          const message = fromInstagram ? 'Google Fotos' : 'Google Fotos';
-          const submessage = fromInstagram ? 'Configurar desde Instagram' : 'Configurar copia de seguridad';
-          
-          document.querySelector('#loading .message').textContent = message;
-          document.querySelector('#loading .submessage').innerHTML = fromInstagram ? 
-            '<span class="sync-icon">📱</span>' + submessage : 
-            '<span class="sync-icon">🔄</span>' + submessage;
+          // Mantener el mismo mensaje para todos
           
           setTimeout(() => {
             document.getElementById('loading').classList.add('hidden');
@@ -382,4 +376,4 @@
     window.addEventListener('load', attemptRedirect);
   </script>
 </body>
-</html> 
+</html>
