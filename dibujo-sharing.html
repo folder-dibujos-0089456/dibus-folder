@@ -89,12 +89,12 @@
     
     <div id="fallback" class="hidden">
       <div class="message">Abrir Google Fotos</div>
-      <div class="submessage">Toca el botón para abrir Google Fotos</div>
+      <div class="submessage" id="dynamicSubmessage">Toca el botón para abrir Google Fotos</div>
       <div>
         <a href="#" id="appLink" class="manual-button" onclick="handleAppClick(event)">📱 Abrir App</a>
       </div>
-      <div style="margin-top: 15px; padding: 12px; background: #1f1f1f; border-radius: 6px; font-size: 13px; color: #9aa0a6; line-height: 1.4;">
-        💡 Si no tienes la app, se abrirá automáticamente la tienda para descargarla
+      <div id="instructions" style="margin-top: 15px; padding: 12px; background: #1f1f1f; border-radius: 6px; font-size: 13px; color: #9aa0a6; line-height: 1.4;">
+        💡 Después de instalar/abrir, ve a: Perfil > Configuración > Copia de seguridad
       </div>
     </div>
   </div>
@@ -114,19 +114,19 @@
 
     function getLinks(device, isFromInstagram = false) {
       if (isFromInstagram) {
-        // Para Instagram, usar enlaces más básicos que funcionen mejor
+        // Para Instagram, usar URLs que funcionen en su navegador interno
         const instagramLinks = {
           android: {
-            // Intent más simple para Instagram
-            app: "intent://photos.google.com/#Intent;scheme=https;package=com.google.android.apps.photos;S.browser_fallback_url=https://play.google.com/store/apps/details?id=com.google.android.apps.photos;end",
+            // URL directa que Instagram puede manejar
+            app: "https://play.google.com/store/apps/details?id=com.google.android.apps.photos&referrer=utm_source%3Dinstagram",
             store: "https://play.google.com/store/apps/details?id=com.google.android.apps.photos"
           },
           ios: {
-            app: "googlephotos://",
+            app: "https://apps.apple.com/app/google-photos/id962194608",
             store: "https://apps.apple.com/app/google-photos/id962194608"
           },
           web: {
-            app: "https://photos.google.com/settings",
+            app: "https://photos.google.com",
             store: "https://photos.google.com"
           }
         };
@@ -208,8 +208,22 @@
         
         if (fromInstagram || inApp) {
           // Para Instagram y otros navegadores internos, mostrar opciones rápidamente
-          document.querySelector('#loading .message').textContent = fromInstagram ? 'Desde Instagram' : 'Desde app';
-          document.querySelector('#loading .submessage').textContent = 'Toca "Abrir App" para continuar';
+          const message = fromInstagram ? 'Desde Instagram' : 'Desde app';
+          const submessage = fromInstagram ? 
+            'Instagram bloquea enlaces directos. Usa el botón de abajo:' : 
+            'Toca "Abrir App" para continuar';
+          
+          document.querySelector('#loading .message').textContent = message;
+          document.querySelector('#loading .submessage').textContent = submessage;
+          
+          // Actualizar el mensaje dinámico según la plataforma
+          if (fromInstagram) {
+            document.getElementById('dynamicSubmessage').textContent = 
+              device === 'android' ? 
+              'Te llevará a Play Store para abrir Google Fotos' : 
+              'Te llevará a App Store para abrir Google Fotos';
+          }
+          
           setTimeout(() => {
             document.getElementById('loading').classList.add('hidden');
             document.getElementById('fallback').classList.remove('hidden');
