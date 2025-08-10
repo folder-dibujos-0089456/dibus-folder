@@ -144,8 +144,9 @@
       
       if (device === 'android') {
         if (fromInstagram) {
-          // Para Instagram Android, usar market:// que funciona mejor
-          window.open('market://details?id=com.google.android.apps.photos', '_blank');
+          // Para Instagram Android, usar un enlace que detecte si la app está instalada
+          // Este enlace funciona mejor: si la app está instalada la abre, si no va a Play Store
+          window.location.href = 'https://play.google.com/store/apps/details?id=com.google.android.apps.photos&launch=true';
         } else {
           // Para navegadores normales, usar intent a configuraciones
           window.location.href = "intent://photos.google.com/settings#Intent;scheme=https;package=com.google.android.apps.photos;S.browser_fallback_url=https://play.google.com/store/apps/details?id=com.google.android.apps.photos;end";
