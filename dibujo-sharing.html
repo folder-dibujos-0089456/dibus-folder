@@ -47,19 +47,6 @@
   .google-photos-icon {
     width: 56px;
     height: 56px;
-    background: linear-gradient(45deg, #ea4335 25%, #fbbc05 25% 50%, #34a853 50% 75%, #4285f4 75%);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .google-photos-icon::before {
-    content: '';
-    width: 32px;
-    height: 32px;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 2l3.09 6.26L22 9l-5.91 5.91L16.18 22 12 19.82 7.82 22l-.09-7.09L2 9l6.91-.74L12 2z'/%3E%3C/svg%3E") no-repeat center;
-    background-size: contain;
   }
   
   .google-photos-text {
@@ -234,7 +221,7 @@
   <div class="container">
     <div id="loading">
       <div class="google-photos-logo">
-        <div class="google-photos-icon"></div>
+        <img src="https://ssl.gstatic.com/social/photosui/images/logo/favicon_alldp.ico" alt="Google Fotos" class="google-photos-icon">
         <div class="google-photos-text">Google Fotos</div>
       </div>
       <div class="message">Abriendo Google Fotos...</div>
@@ -244,7 +231,7 @@
     
     <div id="fallback" class="hidden">
       <div class="google-photos-logo">
-        <div class="google-photos-icon"></div>
+        <img src="https://ssl.gstatic.com/social/photosui/images/logo/favicon_alldp.ico" alt="Google Fotos" class="google-photos-icon">
         <div class="google-photos-text">Google Fotos</div>
       </div>
       
