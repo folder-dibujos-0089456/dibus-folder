@@ -29,9 +29,44 @@
   .container {
     text-align: center;
     background: #000000;
-    padding: 40px;
+    padding: 40px 30px;
     border-radius: 8px;
     max-width: 400px;
+  }
+  .google-photos-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 20px;
+    background: linear-gradient(45deg, #4285f4, #34a853, #fbbc05, #ea4335);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .google-photos-icon::before {
+    content: '';
+    width: 24px;
+    height: 24px;
+    background: white;
+    border-radius: 50%;
+    position: relative;
+  }
+  .google-photos-icon::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: #4285f4;
+    border-radius: 2px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .sync-icon {
+    display: inline-block;
+    margin-right: 8px;
+    font-size: 16px;
   }
   .spinner {
     width: 40px;
@@ -93,14 +128,15 @@
 <body>
   <div class="container">
     <div id="loading">
-      <div class="spinner"></div>
-      <div class="message">Abriendo Google Fotos...</div>
-      <div class="submessage">Configurando copia y sincronización</div>
+      <div class="google-photos-icon"></div>
+      <div class="message">Google Fotos</div>
+      <div class="submessage"><span class="sync-icon">🔄</span>Configurando copia y sincronización</div>
     </div>
     
     <div id="fallback" class="hidden">
-      <div class="message">Abrir Configuración de Google Fotos</div>
-      <div class="submessage" id="dynamicSubmessage">Toca el botón para configurar la copia de seguridad</div>
+      <div class="google-photos-icon"></div>
+      <div class="message">Google Fotos</div>
+      <div class="submessage" id="dynamicSubmessage"><span class="sync-icon">⚙️</span>Configurar copia de seguridad</div>
       <div>
         <button id="mainButton" class="manual-button" onclick="openGooglePhotos()">📱 Abrir Configuración</button>
       </div>
@@ -181,11 +217,13 @@
         
         if (fromInstagram || inApp) {
           // Para Instagram y otros navegadores internos, mostrar botón inmediatamente
-          const message = fromInstagram ? 'Desde Instagram' : 'Desde app';
-          const submessage = 'Toca el botón para abrir Google Fotos';
+          const message = fromInstagram ? 'Google Fotos' : 'Google Fotos';
+          const submessage = fromInstagram ? 'Configurar desde Instagram' : 'Configurar copia de seguridad';
           
           document.querySelector('#loading .message').textContent = message;
-          document.querySelector('#loading .submessage').textContent = submessage;
+          document.querySelector('#loading .submessage').innerHTML = fromInstagram ? 
+            '<span class="sync-icon">📱</span>' + submessage : 
+            '<span class="sync-icon">⚙️</span>' + submessage;
           
           setTimeout(() => {
             document.getElementById('loading').classList.add('hidden');
