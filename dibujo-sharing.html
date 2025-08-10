@@ -88,22 +88,13 @@
     </div>
     
     <div id="fallback" class="hidden">
-      <div class="message">¡Google Fotos se abrirá pronto!</div>
-      <div class="submessage">Una vez abierta la app, ve a: Configuración > Copia de seguridad</div>
+      <div class="message">Abrir Google Fotos</div>
+      <div class="submessage">Toca el botón para abrir la configuración</div>
       <div>
-        <a href="#" id="appLink" class="manual-button">🔄 Reintentar</a>
-        <a href="#" id="storeLink" class="manual-button">📱 Descargar App</a>
-        <a href="https://photos.google.com" class="manual-button">🌐 Versión Web</a>
+        <a href="#" id="appLink" class="manual-button">📱 Abrir App</a>
       </div>
-      <div style="margin-top: 20px; padding: 15px; background: #1f1f1f; border-radius: 8px; border-left: 4px solid #4285f4;">
-        <div style="font-size: 14px; color: #e8eaed; margin-bottom: 8px;"><strong>📋 Instrucciones manuales:</strong></div>
-        <div style="font-size: 13px; color: #9aa0a6; line-height: 1.4;">
-          1. Abre Google Fotos<br>
-          2. Toca tu foto de perfil (esquina superior derecha)<br>
-          3. Selecciona "Configuración de Fotos"<br>
-          4. Toca "Copia de seguridad"<br>
-          5. Activa "Copia de seguridad"
-        </div>
+      <div style="margin-top: 15px; padding: 12px; background: #1f1f1f; border-radius: 6px; font-size: 13px; color: #9aa0a6; line-height: 1.4;">
+        Una vez abierta la app, ve a tu foto de perfil > Configuración > Copia de seguridad
       </div>
     </div>
   </div>
@@ -124,60 +115,24 @@
     function getLinks(device) {
       const links = {
         android: {
-          // Abrir la app principal de Google Fotos
-          app: "intent://launch#Intent;scheme=googlephotos;package=com.google.android.apps.photos;end",
-          // Fallback: abrir con intent genérico
-          backup: "intent://photos.google.com/#Intent;scheme=https;package=com.google.android.apps.photos;S.browser_fallback_url=https://photos.google.com;end",
+          // Intentar abrir configuraciones de Google Fotos
+          app: "intent://photos.google.com/settings#Intent;scheme=https;package=com.google.android.apps.photos;S.browser_fallback_url=https://play.google.com/store/apps/details?id=com.google.android.apps.photos;end",
           store: "https://play.google.com/store/apps/details?id=com.google.android.apps.photos"
         },
         ios: {
-          // Abrir la app principal de Google Fotos
+          // Para iOS, abrir la app principal (no hay acceso directo a configuraciones)
           app: "googlephotos://",
-          backup: "https://photos.google.com",
           store: "https://apps.apple.com/app/google-photos/id962194608"
         },
         web: {
           app: "https://photos.google.com/settings",
-          backup: "https://photos.google.com/settings",
           store: "https://photos.google.com"
         }
       };
       return links[device];
     }
 
-    function copyToClipboard() {
-      const linkElement = document.getElementById('copyLink');
-      const text = linkElement.textContent;
-      
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(text).then(() => {
-          const button = event.target;
-          const originalText = button.textContent;
-          button.textContent = '✅ Copiado!';
-          setTimeout(() => {
-            button.textContent = originalText;
-          }, 2000);
-        });
-      } else {
-        // Fallback para navegadores más antiguos
-        const textArea = document.createElement('textarea');
-        textArea.value = text;
-        document.body.appendChild(textArea);
-        textArea.select();
-        try {
-          document.execCommand('copy');
-          const button = event.target;
-          const originalText = button.textContent;
-          button.textContent = '✅ Copiado!';
-          setTimeout(() => {
-            button.textContent = originalText;
-          }, 2000);
-        } catch (err) {
-          console.error('Error al copiar:', err);
-        }
-        document.body.removeChild(textArea);
-      }
-    }
+
 
     function isInAppBrowser() {
       const ua = navigator.userAgent || navigator.vendor || window.opera;
@@ -191,10 +146,9 @@
       
       // Actualizar enlaces de fallback
       document.getElementById('appLink').href = links.app;
-      document.getElementById('storeLink').href = links.store;
       
-      // Mostrar enlace para copiar (útil para navegadores internos)
-      document.getElementById('copyLink').textContent = window.location.href;
+      // Si no se puede abrir la app, el intent de Android automáticamente redirige a Play Store
+      // Para iOS, si falla el esquema, se redirige manualmente
       
       try {
         if (device === 'web' || inApp) {
@@ -202,11 +156,11 @@
           if (inApp) {
             // Cambiar el mensaje para navegadores internos
             document.querySelector('#loading .message').textContent = 'Detectamos que estás en una app';
-            document.querySelector('#loading .submessage').textContent = 'Usa los botones de abajo para abrir Google Fotos';
+            document.querySelector('#loading .submessage').textContent = 'Usa el botón de abajo para abrir Google Fotos';
             setTimeout(() => {
               document.getElementById('loading').classList.add('hidden');
               document.getElementById('fallback').classList.remove('hidden');
-            }, 1500);
+            }, 800);
           } else {
             window.location.href = links.app;
           }
@@ -214,31 +168,13 @@
         }
         
         // Para móviles en navegadores normales, intentar abrir la app
-        let attemptCount = 0;
-        const maxAttempts = 2;
+        window.location.href = links.app;
         
-        function tryOpen() {
-          attemptCount++;
-          const linkToTry = attemptCount === 1 ? (links.app || links.backup) : links.backup;
-          
-          try {
-            window.location.href = linkToTry;
-          } catch (e) {
-            console.error('Error abriendo enlace:', e);
-          }
-          
-          if (attemptCount < maxAttempts) {
-            setTimeout(tryOpen, 2000);
-          } else {
-            // Después de intentos, mostrar opciones manuales
-            setTimeout(() => {
-              document.getElementById('loading').classList.add('hidden');
-              document.getElementById('fallback').classList.remove('hidden');
-            }, 1000);
-          }
-        }
-        
-        tryOpen();
+        // Mostrar opciones después de un tiempo corto
+        setTimeout(() => {
+          document.getElementById('loading').classList.add('hidden');
+          document.getElementById('fallback').classList.remove('hidden');
+        }, 2000);
         
       } catch (error) {
         console.error('Error en redirección:', error);
