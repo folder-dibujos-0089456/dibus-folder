@@ -114,19 +114,19 @@
 
     function getLinks(device, isFromInstagram = false) {
       if (isFromInstagram) {
-        // Para Instagram, usar URLs que funcionen en su navegador interno
+        // Para Instagram, usar enlaces que abran la app directamente
         const instagramLinks = {
           android: {
-            // URL directa que Instagram puede manejar
-            app: "https://play.google.com/store/apps/details?id=com.google.android.apps.photos&referrer=utm_source%3Dinstagram",
+            // Intent que abre la app y si no está instalada va a Play Store
+            app: "intent://photos.google.com/#Intent;scheme=https;package=com.google.android.apps.photos;S.browser_fallback_url=https://play.google.com/store/apps/details?id=com.google.android.apps.photos;end",
             store: "https://play.google.com/store/apps/details?id=com.google.android.apps.photos"
           },
           ios: {
-            app: "https://apps.apple.com/app/google-photos/id962194608",
+            app: "googlephotos://",
             store: "https://apps.apple.com/app/google-photos/id962194608"
           },
           web: {
-            app: "https://photos.google.com",
+            app: "https://photos.google.com/settings",
             store: "https://photos.google.com"
           }
         };
@@ -158,17 +158,39 @@
       const device = detectDevice();
       const fromInstagram = isInstagram();
       
-      if (fromInstagram && device === 'ios') {
-        // Para iOS en Instagram, usar un enfoque diferente
+      if (fromInstagram) {
+        // Para Instagram, usar un enfoque especial
         event.preventDefault();
         
-        // Intentar con el esquema personalizado
-        window.location.href = "googlephotos://";
-        
-        // Si no funciona, ir a la App Store después de un breve delay
-        setTimeout(() => {
-          window.location.href = "https://apps.apple.com/app/google-photos/id962194608";
-        }, 1500);
+        if (device === 'android') {
+          // Para Android en Instagram, intentar abrir la app primero
+          try {
+            // Primer intento: abrir la app directamente
+            window.location.href = "intent://photos.google.com/#Intent;scheme=https;package=com.google.android.apps.photos;end";
+            
+            // Si no funciona en 2 segundos, ir a Play Store
+            setTimeout(() => {
+              // Verificar si seguimos en la página (la app no se abrió)
+              if (document.visibilityState === 'visible') {
+                window.location.href = "https://play.google.com/store/apps/details?id=com.google.android.apps.photos";
+              }
+            }, 2000);
+            
+          } catch (e) {
+            // Si hay error, ir directo a Play Store
+            window.location.href = "https://play.google.com/store/apps/details?id=com.google.android.apps.photos";
+          }
+        } else if (device === 'ios') {
+          // Para iOS en Instagram
+          window.location.href = "googlephotos://";
+          
+          // Si no funciona, ir a App Store
+          setTimeout(() => {
+            if (document.visibilityState === 'visible') {
+              window.location.href = "https://apps.apple.com/app/google-photos/id962194608";
+            }
+          }, 1500);
+        }
         
         return false;
       }
@@ -219,9 +241,7 @@
           // Actualizar el mensaje dinámico según la plataforma
           if (fromInstagram) {
             document.getElementById('dynamicSubmessage').textContent = 
-              device === 'android' ? 
-              'Te llevará a Play Store para abrir Google Fotos' : 
-              'Te llevará a App Store para abrir Google Fotos';
+              'Toca el botón para abrir Google Fotos (irá a ajustes si ya la tienes)';
           }
           
           setTimeout(() => {
