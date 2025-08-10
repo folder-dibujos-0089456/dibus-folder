@@ -64,13 +64,13 @@
   }
   
   .spinner {
-    width: 48px;
-    height: 48px;
-    border: 4px solid rgba(66, 133, 244, 0.2);
-    border-top: 4px solid #4285f4;
+    width: 40px;
+    height: 40px;
+    border: 3px solid #333333;
+    border-top: 3px solid #4285f4;
     border-radius: 50%;
-    animation: spin 1.2s linear infinite;
-    margin: 0 auto 32px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 24px;
   }
   
   @keyframes spin {
@@ -92,19 +92,17 @@
   }
   
   .message {
-    font-size: 20px;
-    margin-bottom: 16px;
+    font-size: 16px;
+    margin-bottom: 8px;
     font-weight: 400;
     color: #ffffff;
-    line-height: 1.3;
   }
   
   .submessage {
-    font-size: 18px;
-    opacity: 0.8;
-    margin-bottom: 40px;
+    font-size: 14px;
+    opacity: 0.7;
+    margin-bottom: 20px;
     color: #9aa0a6;
-    line-height: 1.4;
   }
   
   .manual-button {
@@ -220,13 +218,9 @@
 <body>
   <div class="container">
     <div id="loading">
-      <div class="google-photos-logo">
-        <img src="https://ssl.gstatic.com/social/photosui/images/logo/favicon_alldp.ico" alt="Google Fotos" class="google-photos-icon">
-        <div class="google-photos-text">Google Fotos</div>
-      </div>
-      <div class="message">Abriendo Google Fotos...</div>
-      <div class="submessage"><span class="sync-icon">🔄</span>Configurando copia y sincronización</div>
       <div class="spinner"></div>
+      <div class="message">Abriendo Google Fotos...</div>
+      <div class="submessage">Configurando copia y sincronización</div>
     </div>
     
     <div id="fallback" class="hidden">
